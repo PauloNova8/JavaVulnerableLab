@@ -19,6 +19,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
+import javax.xml.XMLConstants;
 
 /**
  *
@@ -43,6 +44,13 @@ public class xxe extends HttpServlet {
         {
           InputStream xml=request.getInputStream();
           DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+          factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+          factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+          factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+          factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+          factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+          factory.setXIncludeAware(false);
+          factory.setExpandEntityReferences(false);
           DocumentBuilder builder = factory.newDocumentBuilder();
           InputSource is = new InputSource(xml); 	
           Document doc = builder.parse(is);
